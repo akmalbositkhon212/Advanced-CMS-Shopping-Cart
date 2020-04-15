@@ -1,0 +1,14 @@
+﻿@model CmsShoppingCart.Models.ViewModels.Pages.PageVM
+
+@{
+    ViewBag.Title = ViewBag.PageTitle;
+    TempData["PageTitle"] = ViewBag.PageTitle;
+}
+
+@Html.Raw(Model.Body)
+@if (ViewBag.Title == "Home")
+{
+    <div class="col-xs-12 col-md-2">
+        @Html.Action("CategoriesPartial", "Shop")
+    </div>
+}

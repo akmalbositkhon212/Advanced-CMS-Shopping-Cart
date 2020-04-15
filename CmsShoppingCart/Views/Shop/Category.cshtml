@@ -1,0 +1,256 @@
+﻿@model IEnumerable<CmsShoppingCart.Models.ViewModels.Shop.ProductVM>
+
+@{
+    ViewBag.Title = ViewBag.CategoryName;
+}
+
+<h2>@ViewBag.CategoryName</h2>
+
+@*<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            Image
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                $@Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <a href="/shop/product-details/@item.Slug">
+                    <img src="/Images/Uploads/Products/@item.Id/Thumbs/@item.ImageName" />
+                </a>
+            </td>
+            <td>
+                <a href="/shop/product-details/@item.Slug">Details</a>
+            </td>
+        </tr>
+    }
+
+</table>*@
+<div class="containerr">
+    <div class="box">
+        @foreach (var item in Model)
+        {
+
+
+
+
+            <div class="card">
+                <div class="imgBx">
+                    <img src="/Images/Uploads/Products/@item.Id/Thumbs/@item.ImageName" alt="images">
+                </div>
+                <div class="details">
+                    <h2> <a style="text-decoration:none" href="/shop/product-details/@item.Slug">@item.Name     </a><br> <span>   Price: @item.Price $ -  <a data-id="@item.Id" href="#" class="addtocart">Add to cart</a>  </span></h2>
+
+                    <span class="loader">
+                        <img src="~/Content/img/ajax-loader.gif" />
+                    </span>
+                    <span class="ajaxmsg">The product has been added to your cart.</span>
+                </div>
+            </div>
+
+
+
+        }
+
+    </div>
+    <style>
+        /*.card {
+                        /* Add shadows to create the "card" effect */
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 0.3s;
+        }
+
+        /* On mouse-over, add a deeper shadow */
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+        /* Add some padding inside the card container */
+        /*.container {
+                          padding: 2px 16px;
+                        }*/
+        .containerr {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        */
+        /*img{
+                                    width:auto;
+                                    height:300px;
+                                    margin:10px;
+                                    transition:all 1s;
+
+                                }
+                                img:hover{
+                                    transform:scale(1,1);
+                                }*/
+        .containerr {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #212121;
+            font-family: sans-serif;
+        }
+
+        .box {
+            width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-gap: 15px;
+            margin: 0 auto;
+        }
+
+        .card {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            background: #fff;
+            margin: 0 auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.2);
+        }
+
+            .card:before,
+            .card:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border-radius: 4px;
+                background: #fff;
+                transition: 0.5s;
+                z-index: -1;
+            }
+
+            .card:hover:before {
+                transform: rotate(20deg);
+                box-shadow: 0 2px 20px rgba(0,0,0,.2);
+            }
+
+            .card:hover:after {
+                transform: rotate(10deg);
+                box-shadow: 0 2px 20px rgba(0,0,0,.2);
+            }
+
+            .card .imgBx {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                bottom: 10px;
+                right: 10px;
+                background: #222;
+                transition: 0.5s;
+                z-index: 1;
+            }
+
+            .card:hover .imgBx {
+                bottom: 80px;
+            }
+
+            .card .imgBx img {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .card .details {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                height: 60px;
+                text-align: center;
+            }
+
+                .card .details h2 {
+                    margin: 0;
+                    padding: 0;
+                    font-weight: 600;
+                    font-size: 20px;
+                    color: #777;
+                    text-transform: uppercase;
+                }
+
+                    .card .details h2 span {
+                        font-weight: 500;
+                        font-size: 16px;
+                        color: #f38695;
+                        display: block;
+                        margin-top: 5px;
+                    }
+    </style>
+
+    @section Scripts {
+
+        <script src="~/Scripts/jquery.fancybox.js"></script>
+        <script>
+$(function () {
+
+    /*
+    * Fancybox
+    */
+
+    $(".fancybox").fancybox();
+
+    ////////////////////////////////////////////////////////
+
+    /*
+    * Add to cart
+    */
+
+    $("a.addtocart").click(function (e) {
+        e.preventDefault();
+
+        $("span.loader").addClass("ib");
+
+        var url = "/cart/AddToCartPartial";
+        var dataid = $(this).data("id");
+        $.get(url, { id: dataid }, function (data) {
+            $(".ajaxcart").html(data);
+        }).done(function () {
+            $("span.loader").removeClass("ib");
+            $("span.ajaxmsg").addClass("ib");
+            setTimeout(function () {
+                $("span.ajaxmsg").fadeOut("fast");
+                $("span.ajaxmsg").removeClass("ib");
+            }, 1000);
+        });
+    });
+
+    ////////////////////////////////////////////////////////
+
+});
+        </script>
+
+    }
